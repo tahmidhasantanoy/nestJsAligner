@@ -8,7 +8,7 @@ import { SellersModule } from './sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
 
-// console.log(ConfigService)
+
 @Module({
   imports: [ConfigModule.forRoot(
     {
@@ -17,9 +17,24 @@ import { MongooseModule } from '@nestjs/mongoose';
     }
   ), MongooseModule.forRootAsync({
     inject: [ConfigService],
-    useFactory: (config: ConfigService) => ({
-      uri: config.get('database.db_url')
-    })
+    useFactory: (config: ConfigService) => {
+      const dbUrl = config.get('database.db_url' as string);
+
+
+      console.log("Checking the database config", dbUrl) // mongodb+srv://Learn-nestJs:KdwNUMwAGIInvVe3@cluster0.oc9fgut.mongodb.net/?appName=Cluster0
+      
+      if (!dbUrl) {
+        throw new Error('DB_URL environment variable is not set. Please set it in your .env file.');
+      }
+      
+      if (!dbUrl.startsWith('mongodb://') && !dbUrl.startsWith('mongodb+srv://')) {
+        throw new Error(`Invalid MongoDB connection string. It must start with "mongodb://" or "mongodb+srv://". Current value: ${dbUrl}`);
+      }
+      
+      return {
+        uri: dbUrl
+      };
+    }
   }), SellersModule],
 
   controllers: [AppController],

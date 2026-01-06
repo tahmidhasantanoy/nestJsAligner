@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-@Schema({timestamps: true})
+@Schema() // It's declare Product class is a schema
 export class Product extends Document {
 
     @Prop({required: true})
@@ -14,4 +14,4 @@ export class Product extends Document {
     price: number;
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product)
+export const ProductSchema = SchemaFactory.createForClass(Product) // Based on the Product class, it will create a schema
