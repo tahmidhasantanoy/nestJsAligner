@@ -37,11 +37,27 @@ export class SellersService {
             }, {
                 $set: updateProductInfo
             }, {
-                new: true,
-                runValidators: true,
+                new: true, // return the updated document
+                runValidators: true, // This is schema validators
             })
 
             return resFromDB;
+        } catch (error) {
+            console.log(error.message, "error")
+            return null;
+        }
+    }
+
+    async deleteProduct(productId) {
+        try {
+            const resFromDB = await this.productModel.deleteOne({ id: productId })
+
+            if(resFromDB?.acknowledged){
+                return resFromDB;
+            }
+            else{
+                return "Something went wrong";
+            }
         } catch (error) {
             console.log(error.message, "error")
             return null;

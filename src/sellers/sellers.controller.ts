@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { AddProductDto, UpdateProductDto } from './Dto/product-dto';
 
@@ -80,6 +80,7 @@ export class SellersController {
         }
     }
 
+    // Update product
     @Patch(':id')
     async updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
         try {
@@ -112,6 +113,33 @@ export class SellersController {
                 success: false,
                 message: error.message,
                 data: null
+            }
+        }
+    }
+
+    // Delete a product
+    @Delete(':id')
+    async deleteProduct(@Param('productId') productId: string) {
+        try {
+            const resFromService = await this.sellersService.deleteProduct(productId)
+
+            if (resFromService) {
+                return {
+                    success: true,
+                    message: "Product deleted successfully",
+                }
+            }
+            else {
+                return {
+                    success: false,
+                    message: "Failed to delete product",
+                }
+            }
+        } catch (error) {
+            console.log(error.message, "error")
+            return {
+                success: false,
+                message: error.message,
             }
         }
     }
