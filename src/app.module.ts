@@ -6,6 +6,7 @@ import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 import { SellersModule } from './sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserModule } from './user/user.module';
 
 
 
@@ -20,9 +21,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     useFactory: (config: ConfigService) => {
       const dbUrl = config.get('database.db_url' as string);
 
-
-      console.log("Checking the database config", dbUrl)
-      
       if (!dbUrl) {
         throw new Error('DB_URL environment variable is not set. Please set it in your .env file.');
       }
@@ -35,7 +33,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         uri: dbUrl
       };
     }
-  }), SellersModule],
+  }), SellersModule, UserModule],
 
   controllers: [AppController],
   providers: [AppService],

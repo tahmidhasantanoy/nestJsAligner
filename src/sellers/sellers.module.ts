@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './Schemas/product.schema';
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }])],
+    imports: [MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }])],  // ??
 
     /* 
     This registers a MongoDB Model so NestJS can inject it into your service.

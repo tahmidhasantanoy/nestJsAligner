@@ -8,7 +8,7 @@ export class SellersController {
     constructor(private readonly sellersService: SellersService) { }
 
 
-    /*Add seller products*/
+    // Add seller products
     @Post()
     async addProducts(@Body() addProductDto: AddProductDto) {
 
@@ -49,7 +49,7 @@ export class SellersController {
         }
     }
 
-    /*Get all products*/
+    // Get all products
     @Get()
     async getAllProducts() {
 
@@ -85,7 +85,6 @@ export class SellersController {
     async getProductById(@Param('productId') productId: string) {
         try {
 
-            console.log(productId, "productId")
             const resFromService = await this.sellersService.getProductById(productId);
 
             if (resFromService) {
