@@ -21,7 +21,8 @@ import { MongooseModule } from '@nestjs/mongoose';
       const dbUrl = config.get('database.db_url' as string);
 
 
-      console.log("Checking the database config", dbUrl) // mongodb+srv://Learn-nestJs:KdwNUMwAGIInvVe3@cluster0.oc9fgut.mongodb.net/?appName=Cluster0
+      console.log("Checking the database config", dbUrl)
+      // mongodb+srv://Learn-nestJs:KdwNUMwAGIInvVe3@cluster0.oc9fgut.mongodb.net/?appName=Cluster0
       
       if (!dbUrl) {
         throw new Error('DB_URL environment variable is not set. Please set it in your .env file.');
