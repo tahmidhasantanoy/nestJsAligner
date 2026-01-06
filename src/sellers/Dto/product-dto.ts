@@ -3,3 +3,9 @@ export class AddProductDto {
     category: string;
     price: number;
 }
+
+export class UpdateProductDto {
+    name?: string;
+    category?: string;
+    price?: number;
+}

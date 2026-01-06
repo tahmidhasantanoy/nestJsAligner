@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { SellersService } from './sellers.service';
-import { AddProductDto } from './Dto/product-dto';
+import { AddProductDto, UpdateProductDto } from './Dto/product-dto';
 
 @Controller('sellers')
 export class SellersController {
@@ -40,7 +40,7 @@ export class SellersController {
                 }
             }
         } catch (error) {
-            console.log(error, "error")
+            console.log(error.message, "error")
             return {
                 success: false,
                 message: error.message,
@@ -67,6 +67,42 @@ export class SellersController {
                 return {
                     success: false,
                     message: "Failed to fetch products",
+                    data: null
+                }
+            }
+        } catch (error) {
+            console.log(error.message, "error")
+            return {
+                success: false,
+                message: error.message,
+                data: null
+            }
+        }
+    }
+
+    @Patch(':id')
+    async updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+        try {
+            const updateProductInfo = {
+                name: updateProductDto.name,
+                category: updateProductDto.category,
+                price: updateProductDto.price,
+                updatedAt: new Date(),
+            }
+
+            const resFromService = await this.sellersService.updateProduct(id, updateProductInfo)
+
+            if (resFromService) {
+                return {
+                    success: true,
+                    message: "Product updated successfully",
+                    data: resFromService
+                }
+            }
+            else {
+                return {
+                    success: false,
+                    message: "Failed to update product",
                     data: null
                 }
             }

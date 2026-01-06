@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
+// Based on this class, data will be stored in the DB.
 @Schema() // It's declare Product class is a schema
 export class Product extends Document {
+
+    @Prop({required: true})
+    id: string;
 
     @Prop({required: true})
     name: string;

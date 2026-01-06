@@ -9,19 +9,38 @@ export class SellersService {
     constructor(@InjectModel(Product.name) private productModel: Model<Product>) { }
 
     async addProducts(addproductInfo) {
-        console.log(addproductInfo, "newProductInfo")
 
         try {
+            console.log(addproductInfo, "addproductInfo")
             const product = new this.productModel(addproductInfo)
             return product.save()
         } catch (error) {
-            console.log(error, "error")
+            console.log(error.message, "error")
         }
     }
 
     async getAllProducts() {
         try {
             const resFromDB = await this.productModel.find()
+            return resFromDB;
+        } catch (error) {
+            console.log(error.message, "error")
+            return null;
+        }
+    }
+
+    async updateProduct(id, updateProductInfo) {
+
+        try {
+            const resFromDB = await this.productModel.findOneAndUpdate({
+                id: id
+            }, {
+                $set: updateProductInfo
+            }, {
+                new: true,
+                runValidators: true,
+            })
+
             return resFromDB;
         } catch (error) {
             console.log(error.message, "error")
