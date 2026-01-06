@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { AddProductDto } from './Dto/product-dto';
 
@@ -41,6 +41,37 @@ export class SellersController {
             }
         } catch (error) {
             console.log(error, "error")
+            return {
+                success: false,
+                message: error.message,
+                data: null
+            }
+        }
+    }
+
+    /*Get all products*/
+    @Get()
+    async getAllProducts() {
+
+        try {
+            const resFromService = await this.sellersService.getAllProducts()
+
+            if (resFromService) {
+                return {
+                    success: true,
+                    message: "Products fetched successfully",
+                    data: resFromService
+                }
+            }
+            else {
+                return {
+                    success: false,
+                    message: "Failed to fetch products",
+                    data: null
+                }
+            }
+        } catch (error) {
+            console.log(error.message, "error")
             return {
                 success: false,
                 message: error.message,

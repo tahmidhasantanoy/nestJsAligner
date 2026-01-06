@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './Schemas/product.schema';
 import { Model } from 'mongoose';
-import { ProductSchema } from './Schemas/product.schema';
 
 @Injectable()
 export class SellersService {
@@ -18,6 +17,15 @@ export class SellersService {
         } catch (error) {
             console.log(error, "error")
         }
-        // return addproductInfo;
+    }
+
+    async getAllProducts() {
+        try {
+            const resFromDB = await this.productModel.find()
+            return resFromDB;
+        } catch (error) {
+            console.log(error.message, "error")
+            return null;
+        }
     }
 }
