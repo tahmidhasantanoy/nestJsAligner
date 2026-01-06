@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto } from './Dto/user-dto';
+import { LoginDto, UserDto } from './Dto/user-dto';
 
 @Controller('auth')
 export class UserController {
@@ -32,6 +32,32 @@ export class UserController {
                     success: false,
                     message: "Failed to create user",
                     data: null
+                }
+            }
+        } catch (error) {
+            console.log(error.message, "error")
+            return {
+                success: false,
+                message: error.message,
+                data: null
+            }
+        }
+    }
+
+    @Post('login')
+    async loginUser(@Body() loginDto: LoginDto) {
+        try {
+            const resFromService = await this.userService.loginUser(loginDto)
+            if (resFromService) {
+                return {
+                    success: true,
+                    message: "Login successful",
+                }
+            }
+            else {
+                return {
+                    success: false,
+                    message: "Login failed",
                 }
             }
         } catch (error) {

@@ -4,3 +4,8 @@ export class UserDto {
     password: string;
     role: 'ADMIN' | 'SELLER' | 'USER';
 }
+
+export class LoginDto {
+    email: string;
+    password: string;
+}
