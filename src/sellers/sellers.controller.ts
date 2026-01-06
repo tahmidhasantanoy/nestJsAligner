@@ -80,6 +80,38 @@ export class SellersController {
         }
     }
 
+    // Get a product by id
+    @Get(':productId')
+    async getProductById(@Param('productId') productId: string) {
+        try {
+
+            console.log(productId, "productId")
+            const resFromService = await this.sellersService.getProductById(productId);
+
+            if (resFromService) {
+                return {
+                    success: true,
+                    message: "Product fetched successfully",
+                    data: resFromService
+                }
+            }
+            else {
+                return {
+                    success: false,
+                    message: "This product is not exist",
+                    data: null
+                }
+            }
+        } catch (error) {
+            console.log(error.message, "error")
+            return {
+                success: false,
+                message: error.message,
+                data: null
+            }
+        }
+    }
+
     // Update product
     @Patch(':id')
     async updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {

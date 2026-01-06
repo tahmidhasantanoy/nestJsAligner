@@ -11,7 +11,6 @@ export class SellersService {
     async addProducts(addproductInfo) {
 
         try {
-            console.log(addproductInfo, "addproductInfo")
             const product = new this.productModel(addproductInfo)
             return product.save()
         } catch (error) {
@@ -22,6 +21,16 @@ export class SellersService {
     async getAllProducts() {
         try {
             const resFromDB = await this.productModel.find()
+            return resFromDB;
+        } catch (error) {
+            console.log(error.message, "error")
+            return null;
+        }
+    }
+
+    async getProductById(productId) {
+        try {
+            const resFromDB = await this.productModel.findOne({ id: productId })
             return resFromDB;
         } catch (error) {
             console.log(error.message, "error")
@@ -52,10 +61,10 @@ export class SellersService {
         try {
             const resFromDB = await this.productModel.deleteOne({ id: productId })
 
-            if(resFromDB?.acknowledged){
+            if (resFromDB?.acknowledged) {
                 return resFromDB;
             }
-            else{
+            else {
                 return "Something went wrong";
             }
         } catch (error) {
