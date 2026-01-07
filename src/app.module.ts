@@ -7,6 +7,7 @@ import appConfig from './config/app.config';
 import { SellersModule } from './sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -33,7 +34,7 @@ import { UserModule } from './user/user.module';
         uri: dbUrl
       };
     }
-  }), SellersModule, UserModule],
+  }), SellersModule, UserModule, AuthModule],
 
   controllers: [AppController],
   providers: [AppService],
