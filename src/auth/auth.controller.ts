@@ -20,8 +20,6 @@ export class AuthController {
                 updatedAt: new Date(),
             }
 
-            console.log(newUserinfo, "registerDto")
-
             const resFromService = await this.authService.createUser(newUserinfo);
             
             if (typeof(resFromService) === 'object') {

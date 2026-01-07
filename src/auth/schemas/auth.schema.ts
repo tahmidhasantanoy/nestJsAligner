@@ -6,16 +6,13 @@ import { Document } from "mongoose";
     timestamps: false, // We're manually handling createdAt/updatedAt
     strict: true // Only save fields defined in schema
 })
-export class User extends Document { // Why it's extending Document?
+export class User extends Document {
 
     @Prop({required: true, unique: true})
     id: string;
 
     @Prop({required: true, type: String})
     fullName: string;
-
-    @Prop({required: true, type: String})
-    X: string;
 
     @Prop({required: true})
     email: string;
@@ -34,12 +31,3 @@ export class User extends Document { // Why it's extending Document?
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-// Explicitly ensure fullName path exists (debugging)
-console.log("=== SCHEMA CREATION DEBUG ===");
-console.log("Schema paths:", Object.keys(UserSchema.paths));
-console.log("fullName in paths?", 'fullName' in UserSchema.paths);
-if (!('fullName' in UserSchema.paths)) {
-    console.log("ERROR: fullName not found in schema paths! Adding manually...");
-    UserSchema.add({ fullName: { type: String, required: true } });
-}

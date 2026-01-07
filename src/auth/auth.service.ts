@@ -2,18 +2,16 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/auth.schema';
-import { RegisterDto } from './Dto/auth-dto';
 import * as bcrypt from 'bcrypt';
-import appConfig from 'src/config/app.config';
+import { RegisterDto } from './Dto/auth-dto';
 
 @Injectable()
 export class AuthService {
 
     constructor(@InjectModel(User.name) private authModel: Model<User>) { }
 
-    async createUser(newUserInfo: any) {
+    async createUser(newUserInfo: RegisterDto) {
         try {
-
             const isExist = await this.authModel.findOne({ email: newUserInfo.email })
             if (isExist) {
                 throw new ConflictException("User already exists")
@@ -31,8 +29,6 @@ export class AuthService {
                 updatedAt: new Date(),
             }
 
-            console.log(userData, "userData")
-            
             // Try using new + save instead of create to get better error messages
             const newUser = new this.authModel(userData); // can't find fullName after this line.
             console.log(newUser, "newUser") // can't find fullName here.
