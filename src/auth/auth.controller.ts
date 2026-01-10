@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { LoginDto, RegisterDto } from './Dto/auth-dto';
 import { AuthService } from './auth.service';
-import { authGuard } from './guards/jwt-auth.guard';
+// import { authGuard } from './guards/jwt-auth.guard';
 
 // @UseGuards(authGuard) // This guards is work for all routes.
 @Controller('auth')
@@ -46,7 +46,6 @@ export class AuthController {
     }
   }
 
-  
   @Post('login')
   // @UseGuards(authGuard) // This guards is work for only this route.
   async loginUser(@Body() loginDto: LoginDto) {

@@ -97,8 +97,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
+## Dataflow of Nestjs
+
+POST /users ──▶ Controller (receives HTTP request) ──▶ Service (business logic) ──▶ Mongoose Model ──▶ MongoDB ↑ Saved document returned
 
 ## Dataflow of Nestjs
 
-POST /users ──▶   Controller (receives HTTP request) ──▶   Service (business logic) ──▶   Mongoose Model ──▶   MongoDB ↑ Saved document returned
-
+1. Refresh token generate (Gemini)
+2. role type auth guards implement

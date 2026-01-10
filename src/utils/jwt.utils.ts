@@ -2,9 +2,9 @@ import { UnauthorizedException } from '@nestjs/common';
 import jwt from 'jsonwebtoken';
 
 interface ItokenPayload {
-    sub: string,
-    email: string,
-    role: string,
+  sub: string;
+  email: string;
+  role: string;
 }
 
 // interface IdecodedToken {
@@ -15,23 +15,27 @@ interface ItokenPayload {
 //     exp: string,
 // }
 
-const generateToken = (payload: ItokenPayload, secret: string, expires_in: string) => {
-
-    const token: string = jwt.sign(payload, secret, { expiresIn: expires_in } as jwt.SignOptions);
-    return token;
-}
-
+const generateToken = (
+  payload: ItokenPayload,
+  secret: string,
+  expires_in: string,
+) => {
+  const token: string = jwt.sign(payload, secret, {
+    expiresIn: expires_in,
+  } as jwt.SignOptions);
+  return token;
+};
 
 const verifyToken = (token: string, secret: string) => {
-    try {
-        const decodedToken = jwt.verify(token, secret)
-        return decodedToken;
-    } catch (error: any) {
-        throw new UnauthorizedException(error.message);
-    }
-}
+  try {
+    const decodedToken = jwt.verify(token, secret);
+    return decodedToken;
+  } catch (error: any) {
+    throw new UnauthorizedException(error.message);
+  }
+};
 
 export default {
-    generateToken,
-    verifyToken
-}
+  generateToken,
+  verifyToken,
+};
