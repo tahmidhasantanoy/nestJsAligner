@@ -49,7 +49,7 @@ export class AuthService {
 
       const resFromDB = await newUser.save();
       return resFromDB;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message, 'error');
       return null;
     }
@@ -79,8 +79,12 @@ export class AuthService {
         role: userInfo.role,
       };
 
-      const jwtSecret = await this.configService.get('app.jwtSecret');
-      const jwtExpiresIn = await this.configService.get('app.jwtExpiresIn');
+      const jwtSecret = (await this.configService.get(
+        'app.jwtSecret',
+      )) as string;
+      const jwtExpiresIn = (await this.configService.get(
+        'app.jwtExpiresIn',
+      )) as string;
 
       console.log(jwtSecret, 'jwtSecret');
       console.log(jwtExpiresIn, 'jwtExpiresIn');

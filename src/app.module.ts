@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -8,35 +13,56 @@ import { SellersModule } from './sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-
-
+import { loggerMiddleware } from './common/middlewares/logger.middleware';
+// import { UserController } from './user/user.controller';
+import { SellersController } from './sellers/sellers.controller';
 
 @Module({
-  imports: [ConfigModule.forRoot(
-    {
+  imports: [
+    ConfigModule.forRoot({
       isGlobal: true, // it's accessable for all
-      load: [databaseConfig, appConfig]
-    }
-  ), MongooseModule.forRootAsync({
-    inject: [ConfigService],
-    useFactory: (config: ConfigService) => {
-      const dbUrl = config.get('database.db_url' as string);
+      load: [databaseConfig, appConfig],
+    }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const dbUrl = config.get('database.db_url') as string;
 
-      if (!dbUrl) {
-        throw new Error('DB_URL environment variable is not set. Please set it in your .env file.');
-      }
-      
-      if (!dbUrl.startsWith('mongodb://') && !dbUrl.startsWith('mongodb+srv://')) {
-        throw new Error(`Invalid MongoDB connection string. It must start with "mongodb://" or "mongodb+srv://". Current value: ${dbUrl}`);
-      }
-      
-      return {
-        uri: dbUrl
-      };
-    }
-  }), SellersModule, UserModule, AuthModule],
+        if (!dbUrl) {
+          throw new Error(
+            'DB_URL environment variable is not set. Please set it in your .env file.',
+          );
+        }
+
+        if (
+          !dbUrl.startsWith('mongodb://') &&
+          !dbUrl.startsWith('mongodb+srv://')
+        ) {
+          throw new Error(
+            `Invalid MongoDB connection string. It must start with "mongodb://" or "mongodb+srv://". Current value: ${dbUrl}`,
+          );
+        }
+
+        return {
+          uri: dbUrl,
+        };
+      },
+    }),
+    SellersModule,
+    UserModule,
+    AuthModule,
+  ],
 
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(loggerMiddleware)
+      .exclude({ path: '', method: RequestMethod.GET }, 'user/*slap')
+      .forRoutes(SellersController);
+    // .forRoutes({ path: 'user/*slap', method: RequestMethod.ALL });
+    // .forRoutes(UserController, SellersController); // This middleware will interept for all route.
+  }
+}

@@ -20,4 +20,23 @@ export class UserService {
     const resFromDB = await this.userModel.find();
     return resFromDB;
   }
+
+  async updateUser(
+    id: string,
+    updateData: { fullName?: string; email?: string },
+  ) {
+    const isExist = await this.userModel.findOne({ id: id });
+
+    if (!isExist) return 'User not found';
+
+    const update = await this.userModel.findOneAndUpdate(
+      { id: isExist.id },
+      { $set: updateData },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+    return update;
+  }
 }

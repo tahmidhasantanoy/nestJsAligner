@@ -1,4 +1,4 @@
-import { Body, Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { authGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -33,5 +33,13 @@ export class UserController {
     } catch (error: any) {
       console.log(error.message);
     }
+  }
+
+  @Patch(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateData: { fullName?: string; email?: string },
+  ) {
+    return this.userService.updateUser(id, updateData);
   }
 }
