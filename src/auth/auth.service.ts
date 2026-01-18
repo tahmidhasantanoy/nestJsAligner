@@ -79,11 +79,9 @@ export class AuthService {
         role: userInfo.role,
       };
 
-      const jwtSecret = (await this.configService.get(
-        'app.jwtSecret',
-      )) as string;
+      const jwtSecret = (await this.configService.get('jwt.secret')) as string;
       const jwtExpiresIn = (await this.configService.get(
-        'app.jwtExpiresIn',
+        'jwt.expiresIn',
       )) as string;
 
       console.log(jwtSecret, 'jwtSecret');

@@ -8,7 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import databaseConfig from './config/database.config';
-import appConfig from './config/app.config';
+import appConfig from './config/configuration';
 import { SellersModule } from './sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
@@ -16,13 +16,25 @@ import { AuthModule } from './auth/auth.module';
 import { loggerMiddleware } from './common/middlewares/logger.middleware';
 // import { UserController } from './user/user.controller';
 import { SellersController } from './sellers/sellers.controller';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    // Configuration Module
     ConfigModule.forRoot({
-      isGlobal: true, // it's accessable for all
+      isGlobal: true, // it's access for all
       load: [databaseConfig, appConfig],
+      envFilePath: ['.env'],
+      cache: true, // Avoids re-reading env vars repeatedly.
     }),
+
+    // Cache module
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 60,
+      max: 100,
+    }),
+
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
@@ -62,6 +74,7 @@ export class AppModule implements NestModule {
       .apply(loggerMiddleware)
       .exclude({ path: '', method: RequestMethod.GET }, 'user/*slap')
       .forRoutes(SellersController);
+    // .forRoutes('*')
     // .forRoutes({ path: 'user/*slap', method: RequestMethod.ALL });
     // .forRoutes(UserController, SellersController); // This middleware will interept for all route.
   }

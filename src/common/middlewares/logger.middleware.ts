@@ -9,7 +9,7 @@ export class loggerMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     try {
-      const checkData = this.configService.get<string>('app.jwtSecret');
+      const checkData = this.configService.get<string>('jwt.secret');
       console.log(`Middle is firing where jwtSecret: ${checkData}`);
 
       next();
