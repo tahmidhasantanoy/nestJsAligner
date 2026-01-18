@@ -17,6 +17,7 @@ import { loggerMiddleware } from './common/middlewares/logger.middleware';
 // import { UserController } from './user/user.controller';
 import { SellersController } from './sellers/sellers.controller';
 import { CacheModule } from '@nestjs/cache-manager';
+import { DatabaseModule } from './infrastructure/database/database.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     SellersModule,
     UserModule,
     AuthModule,
+    DatabaseModule,
   ],
 
   controllers: [AppController],
