@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './schemas/auth.schema';
+import { UserV2 } from './schemas/auth.schema';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './Dto/auth-dto';
 import jwtHelper from 'src/utils/jwt.utils';
@@ -17,12 +17,14 @@ import { UserService } from 'src/user/user.service';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private authModel: Model<User>,
+    @InjectModel(UserV2.name) private authModel: Model<UserV2>,
     private configService: ConfigService,
     private userService: UserService,
   ) {} // why this private configService: ConfigService??
 
   async createUser(newUserInfo: RegisterDto) {
+    console.log(Object.keys(this.authModel.schema.paths), 'SCHEMA PATHS');
+
     try {
       const isExist = await this.authModel.findOne({
         email: newUserInfo.email,
@@ -44,13 +46,17 @@ export class AuthService {
       };
 
       // Try using new + save instead of create to get better error messages
-      const newUser = new this.authModel(userData); // can't find fullName after this line.
-      console.log(newUser, 'newUser'); // can't find fullName here.
+      const newUser = new this.authModel(userData);
+      console.log(newUser, 'newUser');
 
       const resFromDB = await newUser.save();
+      console.log(resFromDB, 'resFromDB');
+
       return resFromDB;
-    } catch (error: any) {
-      console.log(error.message, 'error');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message, 'error');
+      }
       return null;
     }
   }
@@ -87,11 +93,13 @@ export class AuthService {
       console.log(jwtSecret, 'jwtSecret');
       console.log(jwtExpiresIn, 'jwtExpiresIn');
 
+      // I want to implement the new one here.
       const accessToken: string = jwtHelper.generateToken(
         payload,
         jwtSecret,
         jwtExpiresIn,
       );
+
       console.log(accessToken, 'accessToken');
       return { accessToken };
     } catch (error) {

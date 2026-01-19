@@ -16,7 +16,7 @@ async function bootstrap() {
     // Why we are using 'new' keyword here? because we are using a class as a guard and we need to create an instance of the class.
     // Why we call the Guard here? because we are using a class as a guard and we need to create an instance of the class.
 
-    app.use(loggerMiddleware); // Global middleware .
+    // app.use(loggerMiddleware); // Global middleware .
     const configService = app.get(ConfigService);
 
     app.use(
@@ -50,7 +50,7 @@ async function bootstrap() {
     logger.log(`📝 Environment: ${nodeEnv}`);
     logger.log(`🌐 Global prefix: /api`);
     logger.log(`🔒 CORS enabled for: *`);
-    logger.log(`Check this port: ${port}`)
+    logger.log(`Check this port: ${port}`);
   } catch (error) {
     console.log(`Bug is happening here: ${error}`);
   }

@@ -12,12 +12,15 @@ import appConfig from './config/configuration';
 import { SellersModule } from './sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { loggerMiddleware } from './common/middlewares/logger.middleware';
 // import { UserController } from './user/user.controller';
 import { SellersController } from './sellers/sellers.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { DatabaseModule } from './infrastructure/database/database.module';
+import { TokenService } from './infrastructure/auth/services/token/token.service';
+import { ModuleModule } from './infrastructure/auth/module/module.module';
+// import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './infrastructure/auth/auth.module';
 
 @Module({
   imports: [
@@ -39,7 +42,9 @@ import { DatabaseModule } from './infrastructure/database/database.module';
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const dbUrl = config.get('database.db_url') as string;
+        const dbUrl = config.get('agenda.uri') as string;
+
+        console.log(dbUrl);
 
         if (!dbUrl) {
           throw new Error(
@@ -65,16 +70,18 @@ import { DatabaseModule } from './infrastructure/database/database.module';
     UserModule,
     AuthModule,
     DatabaseModule,
+    ModuleModule,
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TokenService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(loggerMiddleware)
-      .exclude({ path: '', method: RequestMethod.GET }, 'user/*slap')
+      // .exclude({ path: '', method: RequestMethod.GET }, 'user/*slap')
+      .exclude({ path: 'user', method: RequestMethod.GET }, 'user/*slap')
       .forRoutes(SellersController);
     // .forRoutes('*')
     // .forRoutes({ path: 'user/*slap', method: RequestMethod.ALL });

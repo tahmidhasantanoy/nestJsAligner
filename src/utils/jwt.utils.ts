@@ -26,7 +26,7 @@ const generateToken = (
   return token;
 };
 
-const verifyToken = (token: string, secret: string) => {
+const validateToken = (token: string, secret: string) => {
   try {
     const decodedToken = jwt.verify(token, secret);
     return decodedToken;
@@ -37,5 +37,5 @@ const verifyToken = (token: string, secret: string) => {
 
 export default {
   generateToken,
-  verifyToken,
+  validateToken,
 };

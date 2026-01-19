@@ -40,7 +40,7 @@ export class AuthController {
       console.log(error.message, 'error');
       return {
         success: false,
-        message: error.message,
+        message: error.message as string,
         data: null,
       };
     }
@@ -62,7 +62,7 @@ export class AuthController {
       console.log(error.message, 'error');
       return {
         success: false,
-        message: error.message,
+        message: error.message as string,
         data: null,
       };
     }

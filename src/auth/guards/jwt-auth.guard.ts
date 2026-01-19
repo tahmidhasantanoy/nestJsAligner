@@ -8,11 +8,12 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import jwtHelper from 'src/utils/jwt.utils';
-import { ConfigService } from '@nestjs/config';
+import { TokenService } from 'src/infrastructure/auth/services/token/token.service';
 
 // What is the meaning of this : @Injectable()? Without any parameter?
-// This is a simple who acccept all requests
+// This is a simple who accept all requests
 export class authGuard implements CanActivate {
+  constructor(private readonly tokenService: TokenService) {}
   // Why use implements CanActivate ?
   /* async  */ canActivate(
     context: ExecutionContext,
@@ -36,19 +37,20 @@ export class authGuard implements CanActivate {
     try {
       //   Verify token and attach user to request object
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const payloadx = jwtHelper.verifyToken(token, 'sukhethaklevutekilai');
+      const payload = jwtHelper.validateToken(token, 'sukhethaklevutekilai'); // the old one
+      const newPayload = this.tokenService.validateTokenAndDecode(token);
       //   const payload = await this.jwtService.verifyAsync(token, {
       //     secret: 'MY_SECRET_KEY',
       //   });
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      request['user'] = payloadx;
+      request['user'] = payload;
     } catch {
       throw new UnauthorizedException('Invalid or expired token');
     }
     return true;
   }
 
-  //   Understood
+  // Understood
   private extractTokenFromHeader(request: Request): string | undefined {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const [type, token] = request.headers['authorization']?.split(' ') ?? [];
