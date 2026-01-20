@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './Schemas/user.schema';
-import { UserV2 } from 'src/auth/schemas/auth.schema';
+// import { UserV2 } from 'src/auth/schemas/auth.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserV2>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findOne(userInfo: { email: string }) {
     try {

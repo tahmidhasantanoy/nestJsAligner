@@ -1,6 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
+
+interface IDecodedToken {
+  userId: string;
+  username: string;
+  iat: number;
+  exp: number;
+}
 
 @Injectable()
 export class TokenService {
@@ -13,7 +20,8 @@ export class TokenService {
 
     try {
       // const validateToken = jwtHelper.validateToken(token, secret);
-      const validateToken = this.jwtService.verify(token); /* Solve the type issue here */
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, prettier/prettier
+      const validateToken = this.jwtService.verify(token) as IDecodedToken; /* Solve the type issue here */
       /* 
         the secret token come from jwtModule 
         So, the required to give it explicitly.

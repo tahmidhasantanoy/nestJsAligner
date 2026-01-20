@@ -17,8 +17,7 @@ import { loggerMiddleware } from './common/middlewares/logger.middleware';
 import { SellersController } from './sellers/sellers.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { DatabaseModule } from './infrastructure/database/database.module';
-import { TokenService } from './infrastructure/auth/services/token/token.service';
-import { ModuleModule } from './infrastructure/auth/module/module.module';
+import { AuthController } from './infrastructure/auth/handlers/auth.controller';
 // import { AuthModule } from './auth/auth.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
 
@@ -70,21 +69,20 @@ import { AuthModule } from './infrastructure/auth/auth.module';
     UserModule,
     AuthModule,
     DatabaseModule,
-    ModuleModule,
   ],
 
   controllers: [AppController],
-  providers: [AppService, TokenService],
+  providers: [AppService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(loggerMiddleware)
-      // .exclude({ path: '', method: RequestMethod.GET }, 'user/*slap')
-      .exclude({ path: 'user', method: RequestMethod.GET }, 'user/*slap')
-      .forRoutes(SellersController);
-    // .forRoutes('*')
-    // .forRoutes({ path: 'user/*slap', method: RequestMethod.ALL });
-    // .forRoutes(UserController, SellersController); // This middleware will interept for all route.
-  }
+export class AppModule /* implements NestModule  */ {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(loggerMiddleware)
+  //     // .exclude({ path: '', method: RequestMethod.GET }, 'user/*slap')
+  //     .exclude({ path: 'user', method: RequestMethod.GET }, 'user/*slap')
+  //     .forRoutes(SellersController);
+  // .forRoutes('*')
+  // .forRoutes({ path: 'user/*slap', method: RequestMethod.ALL });
+  // .forRoutes(UserController, SellersController); // This middleware will interept for all route.
+  // }
 }

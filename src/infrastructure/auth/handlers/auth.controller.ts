@@ -1,9 +1,7 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { LoginDto, RegisterDto } from './Dto/auth-dto';
-import { AuthService } from './auth.service';
-// import { authGuard } from './guards/jwt-auth.guard';
+import { Body, Controller, Post } from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
+import { LoginDto, RegisterDto } from 'src/auth/Dto/auth-dto';
 
-// @UseGuards(authGuard) // This guards is work for all routes.
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -49,7 +47,7 @@ export class AuthController {
   @Post('login')
   // @UseGuards(authGuard) // This guards is work for only this route.
   async loginUser(@Body() loginDto: LoginDto) {
-    console.log(loginDto);
+    console.log(loginDto, 'loginDto from infrastructure');
     try {
       const resFromService = await this.authService.loginUser(loginDto);
       console.log(resFromService, 'resFromService');

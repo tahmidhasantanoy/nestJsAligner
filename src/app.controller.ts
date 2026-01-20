@@ -11,7 +11,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    const data = this.configService.get<number>('app.port');
+    const data = this.configService.get<number>('port');
     console.log(data);
     return this.appService.getHello();
   }

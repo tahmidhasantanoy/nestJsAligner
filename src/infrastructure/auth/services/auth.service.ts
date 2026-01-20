@@ -5,39 +5,33 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-// import { UserV2 } from './schemas/auth.schema';
-import { User } from './schemas/auth.schema';
-import * as bcrypt from 'bcrypt';
-import { RegisterDto } from './Dto/auth-dto';
-import jwtHelper from 'src/utils/jwt.utils';
 import { ConfigService } from '@nestjs/config';
+import { RegisterDto } from 'src/auth/Dto/auth-dto';
 import { UserService } from 'src/user/user.service';
+import * as bcrypt from 'bcrypt';
+import jwtHelper from '../../../utils/jwt.utils';
 
 @Injectable()
 export class AuthService {
   constructor(
-    // @InjectModel(UserV2.name) private authModel: Model<UserV2>,
-    @InjectModel(User.name) private authModel: Model<User>,
     private configService: ConfigService,
     private userService: UserService,
-  ) {} // why this private configService: ConfigService??
+  ) {}
 
   async createUser(newUserInfo: RegisterDto) {
-    console.log(Object.keys(this.authModel.schema.paths), 'SCHEMA PATHS');
-
     try {
-      const isExist = await this.authModel.findOne({
+      const isExist = await this.userService.findOne({
         email: newUserInfo.email,
       });
+
       if (isExist) {
         throw new ConflictException('User already exists');
       }
 
-      // const configService = appConfig
-      // const hashedPassword = await bcrypt.hash(newUserInfo.password,saltRounds)
-      const hashedPassword = await bcrypt.hash(newUserInfo.password, 10);
+      const hashedPassword = (await bcrypt.hash(
+        newUserInfo.password,
+        10,
+      )) as string;
 
       // Explicitly map all fields to ensure fullName is included
       const userData = {
@@ -47,14 +41,9 @@ export class AuthService {
         updatedAt: new Date(),
       };
 
-      // Try using new + save instead of create to get better error messages
-      const newUser = new this.authModel(userData);
-      console.log(newUser, 'newUser');
-
-      const resFromDB = await newUser.save();
-      console.log(resFromDB, 'resFromDB');
-
-      return resFromDB;
+      // TODO: Implement createUser method in UserService to save user
+      // For now returning null as placeholder
+      return null;
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message, 'error');

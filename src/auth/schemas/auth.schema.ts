@@ -6,7 +6,8 @@ import { Document } from 'mongoose';
   timestamps: false, // We're manually handling createdAt/updatedAt
   strict: true, // Only save fields defined in schema
 })
-export class UserV2 extends Document {
+// export class UserV2 extends Document {
+export class User extends Document {
   j;
   @Prop({ required: true, unique: true })
   id: string;
@@ -30,4 +31,5 @@ export class UserV2 extends Document {
   updatedAt: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserV2);
+// export const UserSchema = SchemaFactory.createForClass(UserV2);
+export const UserSchema = SchemaFactory.createForClass(User);

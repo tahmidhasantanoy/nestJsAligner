@@ -1,10 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TokenService } from './services/token/token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TokenService } from './services/token.service';
+import { AuthService } from './services/auth.service';
+import { AuthController } from './handlers/auth.controller';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
+    UserModule,
     ConfigModule,
     JwtModule.registerAsync({
       //   imports: [ConfigModule],
@@ -17,13 +21,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
   ],
-  providers: [TokenService], // here i give the provider
-  exports: [
-    TokenService,
-    JwtModule,
-  ] /* After adding the JwtModule solve the issue */,
-  /* Why it solve the issue after adding the JwtModule??
-  What is the relation jwtService with jwtModule || jwtService is used in tokenService? */
+  controllers: [AuthController],
+  providers: [TokenService, AuthService], // if i don't take it in the provider array. What will happened?
+  exports: [TokenService, AuthService, JwtModule],
 })
 export class AuthModule {}
 

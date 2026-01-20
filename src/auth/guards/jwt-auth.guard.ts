@@ -7,8 +7,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { TokenService } from 'src/infrastructure/auth/services/token.service';
 import jwtHelper from 'src/utils/jwt.utils';
-import { TokenService } from 'src/infrastructure/auth/services/token/token.service';
 
 // What is the meaning of this : @Injectable()? Without any parameter?
 // This is a simple who accept all requests
@@ -43,7 +43,7 @@ export class authGuard implements CanActivate {
       //     secret: 'MY_SECRET_KEY',
       //   });
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      request['user'] = payload;
+      request['user'] = /* payload; */ newPayload;
     } catch {
       throw new UnauthorizedException('Invalid or expired token');
     }
