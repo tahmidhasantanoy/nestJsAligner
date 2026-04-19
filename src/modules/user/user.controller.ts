@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { authGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -32,6 +40,25 @@ export class UserController {
       };
     } catch (error: any) {
       console.log(error.message);
+    }
+  }
+
+  @Post('/create-user')
+  async createUser(@Body() createUser: any) {
+    try {
+      const resFromService = await this.userService.createUser(createUser);
+
+      return {
+        success: true,
+        message: 'User create successfully',
+        data: resFromService,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || 'User create failed',
+        data: null,
+      };
     }
   }
 

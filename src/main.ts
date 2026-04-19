@@ -39,7 +39,7 @@ async function bootstrap() {
       methods: ['GET', 'POST', 'UPDATE', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     });
 
-    const port = configService.get<number>('port') || 5132;
+    const port = configService.get<number>('port') || 5001;
     const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
 
     console.log(port, 'port check');

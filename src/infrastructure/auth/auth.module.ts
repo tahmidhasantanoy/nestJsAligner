@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TokenService } from './services/token.service';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './handlers/auth.controller';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from 'src/modules/user/user.module';
 
 @Module({
   imports: [

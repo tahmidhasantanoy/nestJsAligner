@@ -9,17 +9,18 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import databaseConfig from './config/database.config';
 import appConfig from './config/configuration';
-import { SellersModule } from './sellers/sellers.module';
+import { SellersModule } from './modules/sellers/sellers.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { loggerMiddleware } from './common/middlewares/logger.middleware';
 // import { UserController } from './user/user.controller';
-import { SellersController } from './sellers/sellers.controller';
+import { SellersController } from './modules/sellers/sellers.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { AuthController } from './infrastructure/auth/handlers/auth.controller';
 // import { AuthModule } from './auth/auth.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
+import { KafkaModule } from './modules/kafka/kafka.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { AuthModule } from './infrastructure/auth/auth.module';
     UserModule,
     AuthModule,
     DatabaseModule,
+    KafkaModule,
   ],
 
   controllers: [AppController],
