@@ -10,7 +10,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   try {
     const app = await NestFactory.create(AppModule, {
-      logger: ['error', 'warn', 'debug', 'fatal', 'log', 'verbose'],
+      logger: ['log', 'error', 'warn', 'debug', 'verbose'],
     });
     // app.useGlobalGuards(new authGuard()) // This is a global guard for all routes.
     // Why we are using 'new' keyword here? because we are using a class as a guard and we need to create an instance of the class.

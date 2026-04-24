@@ -4,17 +4,15 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { CreateKafkaDto } from './dto/create-kafka.dto';
-import { UpdateKafkaDto } from './dto/update-kafka.dto';
 import { Kafka, Producer } from 'kafkajs';
 import { KafkaClientFactory } from './factories/kafka-client.factory';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class KafkaService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(KafkaService.name);
   private readonly kafka: Kafka;
   private readonly producer: Producer;
-  private logger: Logger;
 
   constructor(private configService: ConfigService) {
     this.kafka = KafkaClientFactory.create(this.configService); // Create kafka-client || It's help to connect kafka-server.
@@ -27,19 +25,19 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     });
   }
 
-  onModuleInit() {
+  async onModuleInit() {
     try {
-      this.producer.connect();
-      this.logger.log(`Kafka is connected`);
+      await this.producer.connect();
+      this.logger.log(`Kafka is connected 🚀`);
     } catch (error: any) {
       this.logger.error('Failed to connect Kafka producer', error);
       throw error;
     }
   }
 
-  onModuleDestroy() {
+  async onModuleDestroy() {
     try {
-      this.producer.disconnect();
+      await this.producer.disconnect();
       this.logger.log(`Kafka is disconnected`);
     } catch (error: any) {
       this.logger.error('Failed to connect Kafka producer', error);
