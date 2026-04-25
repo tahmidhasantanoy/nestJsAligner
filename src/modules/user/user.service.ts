@@ -3,11 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './Schemas/user.schema';
 import { createUserDto } from './Dto/user-dto';
+import { KafkaProducerService } from '../kafka/services/kafkaProducer.service';
 // import { UserV2 } from 'src/auth/schemas/auth.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private kafkaProducerService: KafkaProducerService,
+  ) {}
 
   async findOne(userInfo: { email: string }) {
     try {
@@ -58,6 +62,8 @@ export class UserService {
 
       // Create new user
       const newUser = new this.userModel(userInfo);
+
+      await this.kafkaProducerService.publishEvent(newUser)
       return await newUser.save();
     } catch (error) {
       throw error;

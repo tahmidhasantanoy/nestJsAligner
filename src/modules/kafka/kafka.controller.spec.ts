@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { KafkaController } from './kafka.controller';
-import { KafkaService } from './kafka.service';
+import { KafkaProducerService } from './services/kafkaProducer.service';
 
 describe('KafkaController', () => {
   let controller: KafkaController;
@@ -8,7 +8,7 @@ describe('KafkaController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [KafkaController],
-      providers: [KafkaService],
+      providers: [KafkaProducerService],
     }).compile();
 
     controller = module.get<KafkaController>(KafkaController);
